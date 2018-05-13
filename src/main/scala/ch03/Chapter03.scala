@@ -7,6 +7,10 @@ object Chapter03 {
   final case object Nil extends List[Nothing]
   final case class Cons[A](x: A, tail: List[A]) extends List[A]
 
+  sealed trait Tree[+A]
+  final case class Leaf[A](value: A) extends Tree[A]
+  final case class Branch[A](left: Tree[A], right: Tree[A]) extends Tree[A]
+
   object List {
     def apply[A](as: A*): List[A] =
       if (as.isEmpty) Nil
@@ -141,5 +145,35 @@ object Chapter03 {
       case _ if startsWith(sup, sub) => true
       case Cons(_, t) => hasSubsequence(t, sub)
     }
+  }
+
+  // 3.25
+  def size[A](t: Tree[A]): Int = t match {
+    case Leaf(_) => 1
+    case Branch(l, r) => 1 + size(l) + size(r)
+  }
+
+  // 3.26
+  def maximum(t: Tree[Int]): Int = t match {
+    case Leaf(v) => v
+    case Branch(l, r) => maximum(l) max maximum(r)
+  }
+
+  // 3.27
+  def depth[A](t: Tree[A]): Int = t match {
+    case Leaf(_) => 0
+    case Branch(l, r) => 1 + depth(l) max depth(r)
+  }
+
+  // 3.28
+  def t_map[A, B](ta: Tree[A])(f: A => B): Tree[B] = ta match {
+    case Leaf(v) => Leaf(f(v))
+    case Branch(l, r) => Branch(t_map(l)(f), t_map(r)(f))
+  }
+
+  // 3.29
+  def fold[A, B](t: Tree[A])(f: A => B)(g: (B, B) => B): B = t match {
+    case Leaf(v) => f(v)
+    case Branch(l, r) => g(fold(l)(f)(g), fold(r)(f)(g))
   }
 }

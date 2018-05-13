@@ -56,15 +56,15 @@ class Chapter03Spec extends Specification {
   }
 
   "append" >> {
-    append(list, List(6)) must_=== List(1,2,3,6)
+    append(list, List(6)) must_=== List(1, 2, 3, 6)
   }
 
   "concat" >> {
-    concat(List(List(1), List(2,3))) must_=== list
+    concat(List(List(1), List(2, 3))) must_=== list
   }
 
   "add1" >> {
-    add1(list) must_=== List(2,3,4)
+    add1(list) must_=== List(2, 3, 4)
   }
 
   "doubleToString" >> {
@@ -80,26 +80,63 @@ class Chapter03Spec extends Specification {
   }
 
   "flatMap" >> {
-    flatMap(list)(i => List(i,i)) must_=== List(1,1,2,2,3,3)
+    flatMap(list)(i => List(i, i)) must_=== List(1, 1, 2, 2, 3, 3)
   }
 
   "filter via flatMap" >> {
-    flatFilter(list)(_ > 1) must_=== List(2,3)
+    flatFilter(list)(_ > 1) must_=== List(2, 3)
   }
 
   "add lists" >> {
-    addLists(List(1,2,3), List(4,5,6)) must_=== List(5 ,7 ,9)
+    addLists(List(1, 2, 3), List(4, 5, 6)) must_=== List(5, 7, 9)
   }
 
   "zipWith" >> {
-    zipWith(List(1,2,3), List(4,5,6))(_*_) must_=== List(4, 10, 18)
+    zipWith(List(1, 2, 3), List(4, 5, 6))(_ * _) must_=== List(4, 10, 18)
   }
 
   "hasSub" >> {
-    hasSubsequence(List(1,2,3), List(1,2)) must beTrue
-    hasSubsequence(List(1,2,3), List(1,2,3)) must beTrue
-    hasSubsequence(List(1,2,3), List(2,3)) must beTrue
-    hasSubsequence(List(1,2,3), Nil) must beTrue
-    hasSubsequence(List(1,2,3), List(3, 1)) must beFalse
+    hasSubsequence(List(1, 2, 3), List(1, 2)) must beTrue
+    hasSubsequence(List(1, 2, 3), List(1, 2, 3)) must beTrue
+    hasSubsequence(List(1, 2, 3), List(2, 3)) must beTrue
+    hasSubsequence(List(1, 2, 3), Nil) must beTrue
+    hasSubsequence(List(1, 2, 3), List(3, 1)) must beFalse
   }
+
+  "size" >> {
+    val tree = Branch(
+      Branch(Leaf("a"), Leaf("b")),
+      Branch(Leaf("c"), Leaf("d"))
+    )
+    Chapter03.size(tree) must_=== 7
+  }
+
+  "maximum" >> {
+    val t = Branch(
+      Branch(Leaf(1), Leaf(2)),
+      Branch(Leaf(10), Leaf(4))
+    )
+    maximum(t) must_=== 10
+  }
+
+  "depth" >> {
+    val t = Branch(
+      Branch(Leaf(1), Leaf(2)),
+      Branch(Leaf(10), Branch(Leaf("a"), Leaf("b")))
+    )
+    depth(t) must_=== 2
+  }
+
+  "Tree map" >> {
+    val t = Branch(
+      Leaf(1),
+      Leaf(2)
+    )
+    t_map(t)(_.toString) must_=== Branch(
+      Leaf("1"),
+      Leaf("2")
+    )
+
+  }
+
 }

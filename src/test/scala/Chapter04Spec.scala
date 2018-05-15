@@ -1,8 +1,10 @@
 import org.specs2.mutable.Specification
 import ch04.Chapter04._
 
+import scala.util.Try
+
 class Chapter04Spec extends Specification {
-  "Option.Some" should {
+  "Option" should {
     "map" >> {
       Some(1).map(_ + 5) must_=== Some(6)
     }
@@ -27,4 +29,15 @@ class Chapter04Spec extends Specification {
     }
   }
 
+  "map2" >> {
+    map2(Some(2), Some("abc"))((i, str) => i + str.length) must_=== Some(5)
+  }
+
+  "sequence" >> {
+    sequence(List(Some(1))) must_=== Some(List(1))
+  }
+
+  "traverse" >> {
+    traverse(List("1"))(s => Some(s.toInt)) must_=== Some(List(1))
+  }
 }
